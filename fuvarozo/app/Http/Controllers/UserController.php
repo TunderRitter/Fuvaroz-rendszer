@@ -67,7 +67,15 @@ class UserController extends Controller
 
     public function adminview(Request $request)
     {
-        return view('adminjobs');
+        $user = auth()->user();
+        $drivers = User::where('role', 'driver')->get();
+        $jobs = Task::all();
+        $data = [
+            'user' => $user,
+            'jobs' => $jobs,
+            'drivers' => $drivers
+        ];
+        return view('adminjobs', $data);
     }
 
     public function driverview(Request $request)

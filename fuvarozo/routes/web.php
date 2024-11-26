@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\TaskController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,16 @@ Route::get('/', function () {
 Route::post('/register', [UserController::class, 'register']);
 
 Route::post('/login', [UserController::class, 'login']);
+
+Route::post('/createjob', [TaskController::class, 'create']);
+
+Route::post('/editJob', [TaskController::class, 'edit']);
+
+Route::post('/deletejob', [TaskController::class, 'delete']);
+
+Route::post('/assignjob', [TaskController::class, 'assignDriver']);
+
+Route::get('/editpage', [TaskController::class, 'editview']);
 
 Route::get('/adminview', [UserController::class, 'adminview']);
 
