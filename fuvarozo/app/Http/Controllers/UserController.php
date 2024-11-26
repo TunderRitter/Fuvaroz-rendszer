@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Task;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -18,7 +19,7 @@ class UserController extends Controller
         ]);
 
         User::create([
-            'name' => 'Jozsi',
+            'name' => 'Józsi',
             'email' => 'jozsi@j.com',
             'password' => bcrypt('Jozsi'),
             'role' => 'driver',
@@ -26,7 +27,7 @@ class UserController extends Controller
 
         User::create([
             'name' => 'Sanyi',
-            'email' => 'sanyi@s.com',
+            'email' => 'sanyi@j.com',
             'password' => bcrypt('Sanyi'),
             'role' => 'driver',
         ]);
@@ -43,7 +44,18 @@ class UserController extends Controller
         $user = User::create($fields);
         auth() -> login($user);
 
-        return view('driverjobs');
+        $userId = $user -> id; 
+        $jobs = Task::where('driver_id', $userId)->get();
+        $data = [
+            'user' => $user,
+            'jobs' => $jobs
+        ];
+        return view('driverjobs', $data);
+    }
+
+    public function logout(){
+        auth() -> logout();
+        return redirect('/');
     }
 
     public function login(Request $request){
@@ -63,6 +75,8 @@ class UserController extends Controller
                 return redirect('/driverview');
             }
         }
+        
+        return back()->withErrors(['login' => 'Invalid credentials.']);
     }
 
     public function adminview(Request $request)
@@ -70,10 +84,12 @@ class UserController extends Controller
         $user = auth()->user();
         $drivers = User::where('role', 'driver')->get();
         $jobs = Task::all();
+        $vehicles = Vehicle::all();
         $data = [
             'user' => $user,
             'jobs' => $jobs,
-            'drivers' => $drivers
+            'drivers' => $drivers,
+            'vehicles' => $vehicles
         ];
         return view('adminjobs', $data);
     }
@@ -82,9 +98,11 @@ class UserController extends Controller
     {
         $user = auth()->user();
         $jobs = Task::where('driver_id', $user -> id) -> get();
+        $vehicles = Vehicle::where('driver_id', $user -> id) -> get();
         $data = [
             'user' => $user,
-            'jobs' => $jobs
+            'jobs' => $jobs,
+            'vehicles' => $vehicles
         ];
         return view('driverjobs', $data);
     }

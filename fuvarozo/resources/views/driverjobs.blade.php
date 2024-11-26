@@ -30,16 +30,20 @@
                 <td>{{ $job -> phone_number }}</td>
                 <td>{{ $job -> status == "assigned" ? 'Kiosztva' : ($job -> status == 'in-progress' ?  "Folyamatban" : ($job -> status == 'completed' ? "Elvégezve" : "Sikertelen"))}}</td>
                 <td>
-                    <form method="POST" action="/changestatus">
-                        @csrf
-                        <input name="id" value="{{$job -> id}}" type="text" hidden>
-                        <select name="status" onchange="this.form.submit()" value="{{$job -> status}}">
-                            <option value="assigned">Kiosztva</option>
-                            <option value="in-progress">Folyamatban</option>
-                            <option value="completed">Elvégezve</option>
-                            <option value="failed">Sikertelen</option>
-                        </select>
-                    </form>
+                    @if($vehicles -> isEmpty())
+                        <p>Nincs hozzád rendelt jármű</p>
+                    @else
+                        <form method="POST" action="/changestatus">
+                            @csrf
+                            <input name="id" value="{{$job -> id}}" type="text" hidden>
+                            <select name="status" onchange="this.form.submit()" value="{{$job -> status}}">
+                                <option value="assigned">Kiosztva</option>
+                                <option value="in-progress">Folyamatban</option>
+                                <option value="completed">Elvégezve</option>
+                                <option value="failed">Sikertelen</option>
+                            </select>
+                        </form>
+                    @endif
                 </td>
             </tr>
         @endforeach
