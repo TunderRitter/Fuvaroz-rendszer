@@ -54,7 +54,7 @@ class TaskController extends Controller
 
     public function status(Request $request){
         $job = Task::findOrFail($request -> id);
-        $job->update(['status' => $request->status]);
+        $job->update(['status' => $request -> status]);
 
         return redirect('/driverview');
     }

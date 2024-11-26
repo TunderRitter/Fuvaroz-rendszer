@@ -19,7 +19,7 @@ class UserController extends Controller
         ]);
 
         User::create([
-            'name' => 'Józsi',
+            'name' => 'Jozsi',
             'email' => 'jozsi@j.com',
             'password' => bcrypt('Jozsi'),
             'role' => 'driver',
@@ -31,6 +31,8 @@ class UserController extends Controller
             'password' => bcrypt('Sanyi'),
             'role' => 'driver',
         ]);
+
+        return redirect('/');
     }
     public function register(Request $request){
         $fields = $request -> validate([
@@ -55,6 +57,9 @@ class UserController extends Controller
 
     public function logout(){
         auth() -> logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
         return redirect('/');
     }
 
@@ -82,6 +87,11 @@ class UserController extends Controller
     public function adminview(Request $request)
     {
         $user = auth()->user();
+
+        if ($user && $user -> role != 'admin') {
+            return redirect('/');
+        }
+
         $drivers = User::where('role', 'driver')->get();
         $jobs = Task::all();
         $vehicles = Vehicle::all();
@@ -97,6 +107,12 @@ class UserController extends Controller
     public function driverview(Request $request)
     {
         $user = auth()->user();
+
+        if ($user && $user->role != 'driver') {
+            auth()->logout();
+            return redirect('/');
+        }
+        
         $jobs = Task::where('driver_id', $user -> id) -> get();
         $vehicles = Vehicle::where('driver_id', $user -> id) -> get();
         $data = [

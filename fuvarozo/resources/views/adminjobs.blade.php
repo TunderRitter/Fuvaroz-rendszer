@@ -4,9 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="{{ asset('style.css') }}" rel="stylesheet">
     <title>Admin nézet</title>
 </head>
 <body>
+@auth
+<div style="padding: 2px; margin: 3px;">
+    <form action="/logout" method="POST">
+        @csrf
+        <button type="submit">Kijelentkezés</button>
+    </form>
+</div>
 
 <h1>Munka létrehozása</h1>
 
@@ -34,7 +42,7 @@
                 <option value="{{ $driver->id }}">{{ $driver->name }}</option>
             @endforeach
         </select>
-        <button type="submit">Jármű létrehozása</button>
+        <button type="submit">Létrehozás</button>
     </form>
 </div>
 
@@ -67,10 +75,11 @@
                         <form action="/assignjob" method="POST">
                             @csrf
                             <input name="id" value="{{$job -> id}}" type="text" hidden>
-                            <select name="driver_id" onchange="this.form.submit()">
+                            <select name="driver_id">
                                 @foreach($drivers as $driver)
                                     <option value="{{ $driver -> id }}">{{ $driver -> name }}</option>
                                 @endforeach
+                                <button type="submit">Hozzárendelés</button>
                             </select>
                         </form>
                     </div>
@@ -128,6 +137,9 @@
         @endforeach
     </tbody>
 </table>
-
+@endauth
+@guest
+    <p>Kérlek jelentkezz be!</p>
+@endguest
 </body>
 </html>

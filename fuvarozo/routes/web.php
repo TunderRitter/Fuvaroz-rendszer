@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\VehicleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,12 +17,16 @@ use App\Http\Controllers\TaskController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
 Route::post('/register', [UserController::class, 'register']);
 
+Route::post('/logout', [UserController::class, 'logout']);
+
 Route::post('/login', [UserController::class, 'login']);
+
+Route::post('/admin', [UserController::class, 'admin']);
 
 Route::post('/createjob', [TaskController::class, 'create']);
 
@@ -32,6 +37,10 @@ Route::post('/deletejob', [TaskController::class, 'delete']);
 Route::post('/assignjob', [TaskController::class, 'assignDriver']);
 
 Route::post('/changestatus', [TaskController::class, 'status']);
+
+Route::post('/createvehicle', [VehicleController::class, 'create']);
+
+Route::post('/deletevehicle', [VehicleController::class, 'delete']);
 
 Route::get('/editpage', [TaskController::class, 'editview']);
 
