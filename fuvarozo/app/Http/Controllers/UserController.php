@@ -80,6 +80,12 @@ class UserController extends Controller
 
     public function driverview(Request $request)
     {
-        return view('driverjobs');
+        $user = auth()->user();
+        $jobs = Task::where('driver_id', $user -> id) -> get();
+        $data = [
+            'user' => $user,
+            'jobs' => $jobs
+        ];
+        return view('driverjobs', $data);
     }
 }

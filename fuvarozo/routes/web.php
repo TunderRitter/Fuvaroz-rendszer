@@ -31,6 +31,8 @@ Route::post('/deletejob', [TaskController::class, 'delete']);
 
 Route::post('/assignjob', [TaskController::class, 'assignDriver']);
 
+Route::post('/changestatus', [TaskController::class, 'status']);
+
 Route::get('/editpage', [TaskController::class, 'editview']);
 
 Route::get('/adminview', [UserController::class, 'adminview']);

@@ -52,6 +52,13 @@ class TaskController extends Controller
         return redirect('/adminview');
     }
 
+    public function status(Request $request){
+        $job = Task::findOrFail($request -> id);
+        $job->update(['status' => $request->status]);
+
+        return redirect('/driverview');
+    }
+
     public function editview(Request $request)
     {
         $user = auth()->user();
